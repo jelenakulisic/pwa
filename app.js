@@ -78,7 +78,7 @@ captureButton.addEventListener('click', async () => {
             // Omogući gumb za uploadanje slike
             uploadButton.style.display = 'block';
 
-            showNotification('Error while accessing camera.', 'error');
+            showNotification('Camera is not allowed in this browser.', 'error');
         }
     } else {
         // Ako Camera API nije podržan, prikaži alternativnu poruku
@@ -90,6 +90,14 @@ captureButton.addEventListener('click', async () => {
     }
 
 });
+function showNotification(message, type) {
+    const notification = new Notification('Travel Journal', {
+        body: message,
+        icon: type === 'success' ? 'success.png' : 'error.png', 
+    });
+
+    setTimeout(notification.close.bind(notification), 3000);
+}
 
 uploadButton.addEventListener('click', function() {
     fileInput.click();
@@ -107,14 +115,18 @@ fileInput.addEventListener('change', function() {
         imgElement.src = imageUrl;
         photosContainer.appendChild(imgElement);
     }
+
+    if (Notification.permission !== 'granted') {
+        Notification.requestPermission().then(function (permission) {
+          if (permission === 'granted') {
+            showNotification('The photo is uploaded!', 'success');
+          }
+        });
+      } else {
+        showNotification('The photo is uploaded!', 'success');
+    }
 });
 
-function showNotification(message, type) {
-    const notification = new Notification('Travel Journal', {
-        body: message,
-        icon: type === 'success' ? 'success.png' : 'error.png', 
-    });
-}
 
 
 
