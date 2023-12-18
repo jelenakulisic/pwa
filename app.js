@@ -33,39 +33,79 @@ installButton.addEventListener('click', () => {
 const captureButton = document.getElementById('captureButton');
 const videoEl = document.getElementById('videoElement');
 
-captureButton.addEventListener('click', async () => {
-    try {
-        videoEl.style.display = 'block';
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        videoEl.srcObject = stream;
+var errorMessageElement = document.getElementById('error-message');
+var fileInput = document.getElementById('file-input');
+var uploadButton = document.getElementById('upload-button');
 
-        const track = stream.getVideoTracks()[0];
-        const imageCapture = new ImageCapture(track);
-        const photoBlob = await imageCapture.takePhoto();
-        const imageUrl = URL.createObjectURL(photoBlob);
+const photosContainer = document.getElementById('photos');
+
+captureButton.addEventListener('click', async () => {
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        try {
+            videoEl.style.display = 'block';
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            videoEl.srcObject = stream;
+    
+            const track = stream.getVideoTracks()[0];
+            const imageCapture = new ImageCapture(track);
+            const photoBlob = await imageCapture.takePhoto();
+            const imageUrl = URL.createObjectURL(photoBlob);
+    
+            const imgElement = document.createElement('img');
+            imgElement.style.width = '30%'; 
+            imgElement.style.margin= '5px'; 
+            imgElement.src = imageUrl;
+            photosContainer.appendChild(imgElement);
+    
+            if (Notification.permission !== 'granted') {
+                Notification.requestPermission().then(function (permission) {
+                  if (permission === 'granted') {
+                    showNotification('The photo is captured!', 'success');
+                  }
+                });
+              } else {
+                showNotification('The photo is captured!', 'success');
+            }
+    
+            track.stop();
+            videoEl.srcObject = null;
+            
+        } catch (error) {
+            videoEl.style.display = 'none';
+            errorMessageElement.textContent = 'Camera is not allowed in this browser.';
+            errorMessageElement.style.display = 'block';
+
+            // Omogući gumb za uploadanje slike
+            uploadButton.style.display = 'block';
+
+            showNotification('Error while accessing camera.', 'error');
+        }
+    } else {
+        // Ako Camera API nije podržan, prikaži alternativnu poruku
+        errorMessageElement.textContent = 'Camera API is not supported in this browser.';
+        errorMessageElement.style.display = 'block';
+
+        // Omogući gumb za uploadanje slike
+        uploadButton.style.display = 'block';
+    }
+
+});
+
+uploadButton.addEventListener('click', function() {
+    fileInput.click();
+  });
+
+fileInput.addEventListener('change', function() {
+    var selectedFile = fileInput.files[0];
+
+    if (selectedFile) {
+        const imageUrl = URL.createObjectURL(selectedFile);
 
         const imgElement = document.createElement('img');
-        imgElement.style.width = '200px';
-        imgElement.style.height = '300px';
+        imgElement.style.width = '30%'; 
+        imgElement.style.margin= '5px'; 
         imgElement.src = imageUrl;
-        document.body.appendChild(imgElement);
-
-        if (Notification.permission !== 'granted') {
-            Notification.requestPermission().then(function (permission) {
-              if (permission === 'granted') {
-                showNotification('The photo is captured!', 'success');
-              }
-            });
-          } else {
-            showNotification('The photo is captured!', 'success');
-        }
-
-        track.stop();
-        videoEl.srcObject = null;
-        
-    } catch (error) {
-        console.error('Error accessing camera:', error);
-        showNotification('Error while accessing camera.', 'error');
+        photosContainer.appendChild(imgElement);
     }
 });
 
@@ -73,31 +113,8 @@ function showNotification(message, type) {
     const notification = new Notification('Travel Journal', {
         body: message,
         icon: type === 'success' ? 'success.png' : 'error.png', 
-      });
+    });
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    var advancedFeature = document.getElementById('advanced-feature');
-  
-    if (advancedFeature) {
-      if (supportsAdvancedFeature()) {
-        advancedFeature.style.display = 'block';
-      } else {
-        displayNotSupportedMessage();
-        console.log('Advanced feature not supported.');
-      }
-    }
-  });
-  
-function supportsAdvancedFeature() {
-    return ('someAdvancedAPI' in window);
-}
-function displayNotSupportedMessage() {
-    var messageContainer = document.createElement('div');
-    messageContainer.className = 'not-supported-message';
-    messageContainer.innerHTML = 'Sorry, this advanced feature is not supported in your browser.';
-  
-    document.body.appendChild(messageContainer);
-  }
 
 

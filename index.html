@@ -11,16 +11,18 @@
 <body>
     <h1>Hello, Traveler!</h1>
 
-    <div id="advanced-feature">
-        <!-- Napredna funkcionalnost koja se prikazuje ako je podržana -->
-        <p>This is an advanced feature.</p>
-    </div>
-
     <button id="installButton" style="display: none;">Install App</button>
 
-    <button id="captureButton">Take Photo</button>
+    <button id="captureButton">Take a photo</button>
 
     <video id="videoElement" autoplay playsinline style="width: 100%; max-width: 640px;" style="display:none;"></video>
+
+    <div id="error-message" style="display: none; font-family: 'Courier New', Courier, monospace;
+    padding: 20px 10px"></div>
+    <input type="file" id="file-input" style="display: none;">
+    <button id="upload-button" style="display:none;">Upload a photo</button>
+
+    <div id="photos"></div>
 
     <script src="app.js"></script>
 </body>

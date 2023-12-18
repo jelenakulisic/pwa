@@ -6,25 +6,9 @@
     margin-top: 10px;
 }
 
-/* Stilovi za naprednu funkcionalnost, animacije */
-#advanced-feature {
-  background-color: #fff7cc;
-  padding: 10px;
-  border-radius: 5px;
-  animation: fadeIn 2s ease-out;
-}
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 body {
   font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+  background-color: #9f9f9f;
   margin: 0;
   padding: 0;
   display: flex;
@@ -40,7 +24,7 @@ h1 {
 }
 
 button {
-  background-color: #ffc107;
+  background-color: #fff7cc;
   color: #333;
   padding: 10px 20px;
   margin-top: 10px;
@@ -52,15 +36,20 @@ button {
 #videoElement {
   width: 80%;
   max-width: 640px;
-  border: 2px solid #ffc107;
+  border: 2px solid #fff7cc;
   border-radius: 5px;
   margin-top: 20px;
+  display:none;
 }
 
-#img {
-  width: 30%; 
-  max-width: 640px; 
-  margin-top: 20px;
+#photos {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#photos img {
+  width: 20%; 
+  margin: 5px; 
 }
 
   

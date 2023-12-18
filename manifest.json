@@ -1,6 +1,6 @@
 {
-    "name": "Travel Notebook",
-    "short_name": "TravelNotebook",
+    "name": "Travel Journal",
+    "short_name": "TravelJournal",
     "description": "Your travel companion",
     "start_url": "/",
     "display": "standalone",
